@@ -17,9 +17,9 @@ body { margin: 0; padding: 0; }
 <div id="map"></div>
 
 <script>
-    // TO MAKE THE MAP APPEAR YOU MUST
-	// ADD YOUR ACCESS TOKEN FROM
-	// https://account.mapbox.com
+    // cat originalData.geojson | simplify-geojson -t 0.005 > data.geojson
+
+
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
     const map = new mapboxgl.Map({
         container: 'map', // container ID
@@ -33,7 +33,7 @@ body { margin: 0; padding: 0; }
     var startTimer = Date.now();
     map.on('load', () => {
         console.log(`Map loaded in ${Date.now() - startTimer} ms`);
-        $.getJSON('./data/national_cong_2022_1.js', function(data) {
+        $.getJSON('./data/data.geojson', function(data) {
             console.log(`Data fetched in ${Date.now() - startTimer} ms`);
             map.addSource('geojsonSource', {
                 type: 'geojson',
