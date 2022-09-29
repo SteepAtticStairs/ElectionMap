@@ -8,6 +8,8 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
+<script src="./getColor.js"></script>
+
 <style>
 body { margin: 0; padding: 0; }
 #map { position: absolute; top: 0; bottom: 0; width: 100%; }
@@ -29,15 +31,19 @@ body { margin: 0; padding: 0; }
         center: [-98.5606744, 36.8281576],
     });
 
-    console.clear();
+    //console.clear();
     var startTimer = Date.now();
     map.on('load', () => {
         console.log(`Map loaded in ${Date.now() - startTimer} ms`);
         $.getJSON('./data/data.geojson', function(data) {
+            for (var item in data.features) {
+                var base = data.features[item].properties;
+                base.color = getColor(base.Margin);
+            }
+
             console.log(`Data fetched in ${Date.now() - startTimer} ms`);
             map.addSource('geojsonSource', {
                 type: 'geojson',
-                // Use a URL for the value for the `data` property.
                 data: data
             });
 
@@ -48,21 +54,21 @@ body { margin: 0; padding: 0; }
                 paint: {
                     //#0080ff blue
                     //#ff7d7d red
-                    'fill-color': '#ff7d7d',
-                    'fill-opacity': 0.5
+                    'fill-color': ['get', 'color'],
+                    'fill-opacity': 1
                 }
             });
-            map.addLayer({
-                'id': 'districtsLayerOutline',
-                'type': 'line',
-                'source': 'geojsonSource',
-                'paint': {
-                    //#014385 blue
-                    //#850101 red
-                    'line-color': '#850101',
-                    'line-width': 3
-                }
-            });
+            // map.addLayer({
+            //     'id': 'districtsLayerOutline',
+            //     'type': 'line',
+            //     'source': 'geojsonSource',
+            //     'paint': {
+            //         //#014385 blue
+            //         //#850101 red
+            //         'line-color': ['get', 'color'],
+            //         'line-width': 3
+            //     }
+            // });
             function sourceCallback() {
                 if (map.getSource('geojsonSource') && map.isSourceLoaded('geojsonSource')) {
                     console.log(`Map layer loaded in ${Date.now() - startTimer} ms`);
