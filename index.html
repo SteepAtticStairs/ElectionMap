@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- <title>Load data from an external GeoJSON file</title> -->
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+    // TO MAKE THE MAP APPEAR YOU MUST
+	// ADD YOUR ACCESS TOKEN FROM
+	// https://account.mapbox.com
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/dark-v10', // style URL
+        zoom: 3,
+        center: [-98.5606744, 36.8281576],
+    });
+
+    console.clear();
+    var startTimer = Date.now();
+    map.on('load', () => {
+        console.log(`Map loaded in ${Date.now() - startTimer} ms`);
+        $.getJSON('./data/national_cong_2022_1.js', function(data) {
+            console.log(`Data fetched in ${Date.now() - startTimer} ms`);
+            map.addSource('geojsonSource', {
+                type: 'geojson',
+                // Use a URL for the value for the `data` property.
+                data: data
+            });
+
+            map.addLayer({
+                'id': 'districtsLayer',
+                'type': 'fill',
+                'source': 'geojsonSource',
+                paint: {
+                    //#0080ff blue
+                    //#ff7d7d red
+                    'fill-color': '#ff7d7d',
+                    'fill-opacity': 0.5
+                }
+            });
+            map.addLayer({
+                'id': 'districtsLayerOutline',
+                'type': 'line',
+                'source': 'geojsonSource',
+                'paint': {
+                    //#014385 blue
+                    //#850101 red
+                    'line-color': '#850101',
+                    'line-width': 3
+                }
+            });
+            function sourceCallback() {
+                if (map.getSource('geojsonSource') && map.isSourceLoaded('geojsonSource')) {
+                    console.log(`Map layer loaded in ${Date.now() - startTimer} ms`);
+                    map.off('sourcedata', sourceCallback);
+                }
+            }
+            map.on('sourcedata', sourceCallback);
+
+            map.on('click', 'districtsLayer', (e) => {
+                var district = e.features[0].properties.DISTRICT; // '6'
+                var state = e.features[0].properties.STATE; // 'VA'
+                var margin = e.features[0].properties.Margin; // 0.29
+
+                var popupContent =
+                `<div>
+                    <div><b>State:</b> ${state}</div>
+                    <div><b>District:</b> ${district}</div>
+                    <div><b>Margin:</b> ${margin}</div>
+                </div>`
+
+                var pop = new mapboxgl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(popupContent)
+                    //.setHTML(e.features[0].properties.description)
+                    .addTo(map);
+            })
+        })
+    });
+</script>
+
+</body>
+</html>
