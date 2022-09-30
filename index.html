@@ -50,11 +50,11 @@ body { margin: 0; padding: 0; }
     });
 
     // var marginObj = {};
-    // $.getJSON('./data/simplified.geojson', function(data) {
+    // $.getJSON('./data/data.geojson', function(data) {
     //     for (var item in data.features) {
     //         var district = data.features[item].properties.DISTRICT;
     //         var state = data.features[item].properties.STATE;
-    //         var margin = data.features[item].properties.Margin;
+    //         var margin = data.features[item].properties.Color;
     // 
     //         if (!Number.isNaN(parseInt(district))) {
     //             district = parseInt(district);
@@ -69,7 +69,7 @@ body { margin: 0; padding: 0; }
     var startTimer = Date.now();
     map.on('load', () => {
         console.log(`Map loaded in ${Date.now() - startTimer} ms`);
-        $.getJSON('./data/simplified.geojson', function(data) {
+        $.getJSON('./data/data.geojson', function(data) {
             for (var item in data.features) {
                 var base = data.features[item].properties;
                 var district = base.DISTRICT;
@@ -78,7 +78,7 @@ body { margin: 0; padding: 0; }
                     district = parseInt(district);
                 }
                 var margin = margins[`${state}-${district}`];
-                base.color = getColor(margin);
+                base.color = getColor(base.Color);
             }
 
             console.log(`Data fetched in ${Date.now() - startTimer} ms`);
@@ -118,6 +118,7 @@ body { margin: 0; padding: 0; }
             map.on('sourcedata', sourceCallback);
 
             map.on('click', 'districtsLayer', (e) => {
+                console.log(e.features[0])
                 var district = e.features[0].properties.DISTRICT; // '6'
                 var state = e.features[0].properties.STATE; // 'VA'
                 //var margin = e.features[0].properties.Margin; // 0.29
