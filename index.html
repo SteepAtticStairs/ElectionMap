@@ -19,14 +19,31 @@ body { margin: 0; padding: 0; }
 <div id="map"></div>
 
 <script>
+    // https://mapshaper.org/
     // cat originalData.geojson | simplify-geojson -t 0.005 > data.geojson
 
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
     const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: 'mapbox://styles/mapbox/dark-v10', // style URL
+        container: 'map',
+        // https://ovrdc.github.io/gis-tutorials/mapbox/02-adding-layers/
+        style: {
+            "version": 8,
+            "name": "blank",
+            "sources": {
+                "openmaptiles": {
+                    "type": "vector",
+                    "url": ""
+                }
+            },
+            "layers": [{
+                "id": "background",
+                "type": "background",
+                "paint": {
+                    "background-color": "#1d1f20"
+                }
+            }]
+        },
         zoom: 3,
         center: [-98.5606744, 36.8281576],
     });
@@ -35,7 +52,7 @@ body { margin: 0; padding: 0; }
     var startTimer = Date.now();
     map.on('load', () => {
         console.log(`Map loaded in ${Date.now() - startTimer} ms`);
-        $.getJSON('./data/data.geojson', function(data) {
+        $.getJSON('./data/simplified.geojson', function(data) {
             for (var item in data.features) {
                 var base = data.features[item].properties;
                 base.color = getColor(base.Margin);

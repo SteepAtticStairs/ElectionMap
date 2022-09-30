@@ -67,7 +67,6 @@ function getColor(tempVal) {
     tempVal = tempVal * 100;
     tempVal = parseInt(tempVal);
     var allColors = returnFullColorArray();
-    console.log(allColors)
 
     return allColors[tempVal];
 }
