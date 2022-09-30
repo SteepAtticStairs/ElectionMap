@@ -1,7 +1,7 @@
 const tempColorObj = {
-    '1': 'rgb(164, 33, 21)', // red
+    '1': 'rgb(179, 0, 0)', // red
     '0': 'rgb(255, 255, 255)', // white
-    '-1': 'rgb(48, 111, 174)' // blue
+    '-1': 'rgb(0, 113, 179)' // blue
 }
 
 // https://stackoverflow.com/a/23202637

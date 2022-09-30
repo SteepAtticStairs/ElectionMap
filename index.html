@@ -117,6 +117,13 @@ body { margin: 0; padding: 0; }
             }
             map.on('sourcedata', sourceCallback);
 
+            function isNegative(num) {
+                if (Math.sign(num) === -1) {
+                    return true;
+                }
+                return false;
+            }
+
             map.on('click', 'districtsLayer', (e) => {
                 console.log(e.features[0])
                 var district = e.features[0].properties.DISTRICT; // '6'
@@ -127,11 +134,19 @@ body { margin: 0; padding: 0; }
                 }
                 var margin = margins[`${state}-${district}`];
 
+                var marginFormatted = `${Math.round(Math.abs(margin)*100)}%`
+                if (isNegative(margin)) {
+                    marginFormatted = `D+${marginFormatted}`
+                } else {
+                    marginFormatted = `R+${marginFormatted}`
+                }
+                // e.g. R+39%
+
                 var popupContent =
                 `<div>
                     <div><b>State:</b> ${state}</div>
                     <div><b>District:</b> ${district}</div>
-                    <div><b>Margin:</b> ${margin}</div>
+                    <div><b>Margin:</b> ${marginFormatted}</div>
                 </div>`
 
                 var pop = new mapboxgl.Popup()
