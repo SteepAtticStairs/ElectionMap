@@ -1,7 +1,12 @@
 const tempColorObj = {
-    '1': 'rgb(255, 0, 0)',
-    '0': 'rgb(255, 255, 255)',
-    '-1': 'rgb(0, 0, 255)'
+    '1': 'rgb(164, 33, 21)', // red
+    '0': 'rgb(255, 255, 255)', // white
+    '-1': 'rgb(48, 111, 174)' // blue
+}
+
+// https://stackoverflow.com/a/23202637
+function scale(number, inMin, inMax, outMin, outMax) {
+    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
 
 // https://stackoverflow.com/a/24253254
@@ -50,13 +55,21 @@ function returnFullColorArray() {
     var white = rgbValToArray(tempColorObj[0]);
     var blue = rgbValToArray(tempColorObj[-1]);
     for (var i = 0; i <= 100; i++) {
-        var { r, g, b } = getColorGradientValue(i/100, red, white);
-        objToReturn[i] = `rgb(${r}, ${g}, ${b})`;
+        if (i < 50) {
+            var { r, g, b } = getColorGradientValue(scale(i, 0, 50, 0, 100)/100, red, white);
+            objToReturn[i] = `rgb(${r}, ${g}, ${b})`;
+        } else if (i >= 50) {
+            objToReturn[i] = tempColorObj[1];
+        }
         //console.log(`%c${i/100}`, `color: rgb(${r}, ${g}, ${b})`);
     }
     for (var i = -100; i <= 0; i++) {
-        var { r, g, b } = getColorGradientValue(Math.abs(i/100), blue, white);
-        objToReturn[i] = `rgb(${r}, ${g}, ${b})`;
+        if (i >= -50) {
+            var { r, g, b } = getColorGradientValue(Math.abs(scale(i, 0, 50, 0, 100)/100), blue, white);
+            objToReturn[i] = `rgb(${r}, ${g}, ${b})`;
+        } else if (i < -50) {
+            objToReturn[i] = tempColorObj[-1];
+        }
         //console.log(`%c${i/100}`, `color: rgb(${r}, ${g}, ${b})`);
     }
 
