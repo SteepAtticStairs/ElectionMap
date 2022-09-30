@@ -9,6 +9,7 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 <script src="./getColor.js"></script>
+<script src="./margins.js"></script>
 
 <style>
 body { margin: 0; padding: 0; }
@@ -48,6 +49,22 @@ body { margin: 0; padding: 0; }
         center: [-98.5606744, 36.8281576],
     });
 
+    // var marginObj = {};
+    // $.getJSON('./data/simplified.geojson', function(data) {
+    //     for (var item in data.features) {
+    //         var district = data.features[item].properties.DISTRICT;
+    //         var state = data.features[item].properties.STATE;
+    //         var margin = data.features[item].properties.Margin;
+    // 
+    //         if (!Number.isNaN(parseInt(district))) {
+    //             district = parseInt(district);
+    //         }
+    // 
+    //         marginObj[`${state}-${district}`] = margin;
+    //     }
+    //     console.log(marginObj)
+    // })
+
     //console.clear();
     var startTimer = Date.now();
     map.on('load', () => {
@@ -55,7 +72,13 @@ body { margin: 0; padding: 0; }
         $.getJSON('./data/simplified.geojson', function(data) {
             for (var item in data.features) {
                 var base = data.features[item].properties;
-                base.color = getColor(base.Margin);
+                var district = base.DISTRICT;
+                var state = base.STATE;
+                if (!Number.isNaN(parseInt(district))) {
+                    district = parseInt(district);
+                }
+                var margin = margins[`${state}-${district}`];
+                base.color = getColor(margin);
             }
 
             console.log(`Data fetched in ${Date.now() - startTimer} ms`);
@@ -97,7 +120,11 @@ body { margin: 0; padding: 0; }
             map.on('click', 'districtsLayer', (e) => {
                 var district = e.features[0].properties.DISTRICT; // '6'
                 var state = e.features[0].properties.STATE; // 'VA'
-                var margin = e.features[0].properties.Margin; // 0.29
+                //var margin = e.features[0].properties.Margin; // 0.29
+                if (!Number.isNaN(parseInt(district))) {
+                    district = parseInt(district);
+                }
+                var margin = margins[`${state}-${district}`];
 
                 var popupContent =
                 `<div>
