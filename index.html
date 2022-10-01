@@ -45,9 +45,13 @@ body { margin: 0; padding: 0; }
                 }
             }]
         },
-        zoom: 3,
-        center: [-98.5606744, 36.8281576],
+        zoom: 3.5,
+        center: [-97.06912403055196, 37.718324457777555],
     });
+
+    map.on('move', function() {
+        console.log(map.getCenter())
+    })
 
     // var marginObj = {};
     // $.getJSON('./data/data.geojson', function(data) {
