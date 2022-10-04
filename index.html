@@ -9,6 +9,7 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 <script src="./getColor.js"></script>
+<script src="./checkMobileBrowser.js"></script>
 <script src="./margins.js"></script>
 
 <style>
@@ -22,6 +23,8 @@ body { margin: 0; padding: 0; }
 <script>
     // https://mapshaper.org/
     // cat originalData.geojson | simplify-geojson -t 0.005 > data.geojson
+
+    const isMobileBrowser = checkBrowser(); // true if the user is on mobile, false if on desktop / non-mobile
 
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
@@ -50,6 +53,7 @@ body { margin: 0; padding: 0; }
         maxZoom: 10,
         center: [-97.06912403055196, 37.718324457777555],
     });
+    if (isMobileBrowser) { map.setZoom(2.5); }
 
     // map.on('move', function() {
     //     console.log(map.getCenter())
@@ -104,17 +108,17 @@ body { margin: 0; padding: 0; }
                     'fill-opacity': 1
                 }
             });
-            // map.addLayer({
-            //     'id': 'districtsLayerOutline',
-            //     'type': 'line',
-            //     'source': 'geojsonSource',
-            //     'paint': {
-            //         //#014385 blue
-            //         //#850101 red
-            //         'line-color': ['get', 'color'],
-            //         'line-width': 3
-            //     }
-            // });
+            map.addLayer({
+                'id': 'districtsLayerOutline',
+                'type': 'line',
+                'source': 'geojsonSource',
+                'paint': {
+                    //#014385 blue
+                    //#850101 red
+                    'line-color': 'black',
+                    'line-width': 1.5
+                }
+            });
             function sourceCallback() {
                 if (map.getSource('geojsonSource') && map.isSourceLoaded('geojsonSource')) {
                     console.log(`Map layer loaded in ${Date.now() - startTimer} ms`);
