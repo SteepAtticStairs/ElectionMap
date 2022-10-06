@@ -9,6 +9,9 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
 
+
+<link href='./resources/bootstrap4c-custom-switch.css' rel='stylesheet'>
+
 <script src="./getColor.js"></script>
 <script src="./checkMobileBrowser.js"></script>
 <script src="./margins.js"></script>
@@ -48,6 +51,13 @@ body {
 <body>
 <div id="map"></div>
 <div id="clickDialog">Click to enable the map.</div>
+
+<!-- <div>
+    <div class="custom-switch custom-switch-label-onoff">
+        <input class="custom-switch-input" id="binaryColorToggle" type="checkbox">
+        <label class="custom-switch-btn" for="binaryColorToggle"></label>
+    </div>
+</div> -->
 
 <script>
     // https://mapshaper.org/
@@ -131,7 +141,7 @@ body {
                     district = parseInt(district);
                 }
                 var margin = margins[`${state}-${district}`];
-                base.color = getColor(base.Color);
+                base.color = getColor(margin);
             }
 
             console.log(`Data fetched in ${Date.now() - startTimer} ms`);
