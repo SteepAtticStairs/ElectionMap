@@ -7,24 +7,60 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
 
 <script src="./getColor.js"></script>
 <script src="./checkMobileBrowser.js"></script>
 <script src="./margins.js"></script>
 
 <style>
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+body {
+    margin: 0;
+    padding: 0;
+}
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+#clickDialog {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+
+    color: white;
+    background-color: rgba(0, 0, 0, .5);
+    backdrop-filter: blur(5px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    font-family: 'Abel';
+    font-size: 25px;
+}
 </style>
 </head>
 <body>
 <div id="map"></div>
+<div id="clickDialog">Click to enable the map.</div>
 
 <script>
     // https://mapshaper.org/
     // cat originalData.geojson | simplify-geojson -t 0.005 > data.geojson
 
     const isMobileBrowser = checkBrowser(); // true if the user is on mobile, false if on desktop / non-mobile
+
+    $('#clickDialog').on('click', function() {
+        $(this).hide();
+    })
+    $('#map').on('mouseleave', function() {
+        $("#clickDialog").fadeIn(500); 
+    })
 
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
