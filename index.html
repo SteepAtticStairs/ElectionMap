@@ -58,9 +58,16 @@ body {
     $('#clickDialog').on('click', function() {
         $(this).hide();
     })
-    $('#map').on('mouseleave', function() {
-        $("#clickDialog").fadeIn(500); 
-    })
+    if (!isMobileBrowser) {
+        $('#map').on('mouseleave', function() {
+            $("#clickDialog").fadeIn(500); 
+        })
+    } else {
+        // because this will be in an iframe
+        $(window.parent.document).on('click', function() {
+            $("#clickDialog").fadeIn(500); 
+        })
+    }
 
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
