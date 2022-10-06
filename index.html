@@ -17,47 +17,61 @@
 <script src="./margins.js"></script>
 
 <style>
-body {
-    margin: 0;
-    padding: 0;
-}
-#map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-}
-#clickDialog {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    z-index: 1000;
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    #clickDialog {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 1000;
 
-    color: white;
-    background-color: rgba(0, 0, 0, .5);
-    backdrop-filter: blur(5px);
+        color: white;
+        background-color: rgba(0, 0, 0, .5);
+        backdrop-filter: blur(5px);
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
 
-    font-family: 'Abel';
-    font-size: 25px;
-}
+        font-family: 'Abel';
+        font-size: 25px;
+    }
+
+    #optionsSwitch {
+        padding: 8px 8px;
+    }
+    #optionsSwitchText {
+        position: absolute;
+        z-index: 1000;
+
+        color: white;
+        font-family: 'Abel';
+        font-size: 15px;
+    }
 </style>
 </head>
+
 <body>
 <div id="map"></div>
 <div id="clickDialog">Click to enable the map.</div>
 
-<!-- <div>
-    <div class="custom-switch custom-switch-label-onoff">
-        <input class="custom-switch-input" id="binaryColorToggle" type="checkbox">
-        <label class="custom-switch-btn" for="binaryColorToggle"></label>
+<div id="optionsSwitch" class="optionsSwitch">
+    <div class="custom-switch custom-switch optionsSwitch">
+        <input class="custom-switch-input optionsSwitch" id="binaryColorToggle" type="checkbox">
+        <label class="custom-switch-btn optionsSwitch" for="binaryColorToggle"></label>
     </div>
-</div> -->
+    <div id="optionsSwitchText" class="optionsSwitch" style="display: none"></div>
+</div>
 
 <script>
     // https://mapshaper.org/
@@ -69,8 +83,10 @@ body {
         $(this).hide();
     })
     if (!isMobileBrowser) {
-        $('#map').on('mouseleave', function() {
-            $("#clickDialog").fadeIn(500); 
+        $('#map').on('mouseleave', function(e) {
+            if(!$(e.toElement).hasClass('optionsSwitch')) {
+                $("#clickDialog").fadeIn(500); 
+            }
         })
     } else {
         // because this will be in an iframe
@@ -78,6 +94,25 @@ body {
             $("#clickDialog").fadeIn(500); 
         })
     }
+
+    function showHideOptionsSwitchText() {
+        $('#optionsSwitchText').stop(true, true);
+        $('#optionsSwitchText').show();
+        $("#optionsSwitchText").fadeOut(1500);
+    }
+    $('#binaryColorToggle').on('click', function() {
+        var isChecked = $(this).is(':checked');
+
+        if (isChecked) {
+            $('#optionsSwitchText').text('Binary colors');
+            showHideOptionsSwitchText();
+            map.setPaintProperty('districtsLayer', 'fill-color', ['get', 'binaryColor']);
+        } else if (!isChecked) {
+            $('#optionsSwitchText').text('Variable colors');
+            showHideOptionsSwitchText();
+            map.setPaintProperty('districtsLayer', 'fill-color', ['get', 'variableColor']);
+        }
+    })
 
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlZXBhdHRpY3N0YWlycyIsImEiOiJjbDNvaGFod2EwbXluM2pwZTJiMDYzYjh5In0.J_HeH00ry0tbLmGmTy4z5w';
@@ -103,7 +138,7 @@ body {
         },
         zoom: 3.5,
         minZoom: 2,
-        maxZoom: 10,
+        maxZoom: 13,
         center: [-97.06912403055196, 37.718324457777555],
     });
     if (isMobileBrowser) { map.setZoom(2.5); }
@@ -141,7 +176,9 @@ body {
                     district = parseInt(district);
                 }
                 var margin = margins[`${state}-${district}`];
-                base.color = getColor(margin);
+
+                base.variableColor = getColor(margin, 'variable');
+                base.binaryColor = getColor(margin, 'binary');
             }
 
             console.log(`Data fetched in ${Date.now() - startTimer} ms`);
@@ -157,7 +194,7 @@ body {
                 paint: {
                     //#0080ff blue
                     //#ff7d7d red
-                    'fill-color': ['get', 'color'],
+                    'fill-color': ['get', 'variableColor'],
                     'fill-opacity': 1
                 }
             });

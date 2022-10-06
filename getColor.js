@@ -76,10 +76,20 @@ function returnFullColorArray() {
     return objToReturn;
 }
 
-function getColor(tempVal) {
-    tempVal = tempVal * 100;
-    tempVal = parseInt(tempVal);
-    var allColors = returnFullColorArray();
+function getColor(tempVal, mode) {
+    if (mode == 'variable') {
+        tempVal = tempVal * 100;
+        tempVal = parseInt(tempVal);
+        var allColors = returnFullColorArray();
 
-    return allColors[tempVal];
+        return allColors[tempVal];
+    } else if (mode == 'binary') {
+        if (tempVal > 0) {
+            return tempColorObj[1];
+        } else if (tempVal < 0) {
+            return tempColorObj["-1"];
+        } else if (tempVal == 0) {
+            return tempColorObj[0];
+        }
+    }
 }
