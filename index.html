@@ -167,7 +167,7 @@
     var startTimer = Date.now();
     map.on('load', () => {
         console.log(`Map loaded in ${Date.now() - startTimer} ms`);
-        $.getJSON('./data/data.geojson', function(data) {
+        $.getJSON('./data/betterData.geojson', function(data) {
             for (var item in data.features) {
                 var base = data.features[item].properties;
                 var district = base.DISTRICT;
@@ -206,7 +206,7 @@
                     //#014385 blue
                     //#850101 red
                     'line-color': 'black',
-                    'line-width': 1.5
+                    'line-width': 1
                 }
             });
             function sourceCallback() {
