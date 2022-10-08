@@ -66,7 +66,14 @@ function loadHouseData() {
             }
             var margin = houseMargins[`${state}-${district}`];
 
-            var marginFormatted = `${Math.round(Math.abs(margin)*100)}%`
+            // convert to positive number
+            var marginPercent = Math.abs(margin);
+            // convert to percent (e.g. 0.342 becomes 34.2)
+            marginPercent = parseFloat(marginPercent) * 100;
+            // toFixed() rounds the number because of floating point errors
+            var marginFormatted = `${marginPercent.toFixed(1)}%`
+
+
             if (isNegative(margin)) {
                 marginFormatted = `D+${marginFormatted}`
             } else {
