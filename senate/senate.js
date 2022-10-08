@@ -1,5 +1,5 @@
 function loadSenateData() {
-    $.getJSON('./data/senate.geojson', function(data) {
+    $.getJSON('./data/senateSpecial.geojson', function(data) {
         for (var item in data.features) {
             var base = data.features[item].properties;
             var state = base.name;
