@@ -175,7 +175,10 @@
     var urlParams = new URLSearchParams(queryString);
     var urlModeParam = urlParams.get('mode');
 
-    const mode = urlModeParam;
+    var mode = urlModeParam;
+    if (mode == null) {
+        mode = 'house';
+    }
 
     //console.clear();
     var startTimer = Date.now();
