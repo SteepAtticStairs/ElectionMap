@@ -136,12 +136,15 @@
                 }
             }]
         },
-        zoom: 3.5,
-        minZoom: 2,
+        zoom: 3.3,
+        minZoom: 3.3,
         maxZoom: 13,
         center: [-97.06912403055196, 37.718324457777555],
     });
-    if (isMobileBrowser) { map.setZoom(2.5); }
+    if (isMobileBrowser) {
+        map.setMinZoom(2.5);
+        map.setZoom(2.5);
+    }
 
     // map.on('move', function() {
     //     console.log(map.getCenter())
