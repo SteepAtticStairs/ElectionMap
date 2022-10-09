@@ -55,19 +55,19 @@ function returnFullColorArray() {
     var white = rgbValToArray(tempColorObj[0]);
     var blue = rgbValToArray(tempColorObj[-1]);
     for (var i = 0; i <= 100; i++) {
-        if (i < 50) {
-            var { r, g, b } = getColorGradientValue(scale(i, 0, 50, 0, 100)/100, red, white);
+        if (i < 25) {
+            var { r, g, b } = getColorGradientValue(scale(i, 0, 25, 0, 100)/100, red, white);
             objToReturn[i] = `rgb(${r}, ${g}, ${b})`;
-        } else if (i >= 50) {
+        } else if (i >= 25) {
             objToReturn[i] = tempColorObj[1];
         }
         //console.log(`%c${i/100}`, `color: rgb(${r}, ${g}, ${b})`);
     }
     for (var i = -100; i <= 0; i++) {
-        if (i >= -50) {
-            var { r, g, b } = getColorGradientValue(Math.abs(scale(i, 0, 50, 0, 100)/100), blue, white);
+        if (i >= -25) {
+            var { r, g, b } = getColorGradientValue(Math.abs(scale(i, 0, 25, 0, 100)/100), blue, white);
             objToReturn[i] = `rgb(${r}, ${g}, ${b})`;
-        } else if (i < -50) {
+        } else if (i < -25) {
             objToReturn[i] = tempColorObj[-1];
         }
         //console.log(`%c${i/100}`, `color: rgb(${r}, ${g}, ${b})`);
