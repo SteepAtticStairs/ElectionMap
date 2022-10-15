@@ -71,7 +71,7 @@ function loadHouseData() {
             // convert to percent (e.g. 0.342 becomes 34.2)
             marginPercent = parseFloat(marginPercent) * 100;
             // toFixed() rounds the number because of floating point errors
-            var marginFormatted = `${marginPercent.toFixed(1)}%`
+            var marginFormatted = `${marginPercent.toFixed(2)}%`
 
 
             if (isNegative(margin)) {
