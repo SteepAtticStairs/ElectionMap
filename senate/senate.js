@@ -18,8 +18,8 @@ function loadSenateData() {
             }
 
             if (state == 'Georgia') {
-                base.variableColor = 'rgb(131, 58, 245)'
-                base.binaryColor = 'rgb(131, 58, 245)'
+                base.variableColor = 'rgb(96, 201, 66)'
+                base.binaryColor = 'rgb(96, 201, 66)'
             }
         }
 
@@ -71,7 +71,13 @@ function loadSenateData() {
             var state = e.features[0].properties.name;
             var margin = senateMargins[state];
 
-            var marginFormatted = `${Math.round(Math.abs(margin)*100)}%`
+            // convert to positive number
+            var marginPercent = Math.abs(margin);
+            // convert to percent (e.g. 0.342 becomes 34.2)
+            marginPercent = parseFloat(marginPercent) * 100;
+            // toFixed() rounds the number because of floating point errors
+            var marginFormatted = `${marginPercent.toFixed(1)}%`
+
             if (isNegative(margin)) {
                 marginFormatted = `D+${marginFormatted}`
             } else {
