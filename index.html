@@ -176,9 +176,10 @@
     var urlModeParam = urlParams.get('mode');
 
     var mode = urlModeParam;
-    mode = mode.replaceAll('/', '')
     if (mode == null) {
         mode = 'house';
+    } else {
+        mode = mode.replaceAll('/', '');
     }
 
     //console.clear();
