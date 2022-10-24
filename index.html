@@ -21,6 +21,9 @@
 <script src="./senate/senateMargins.js"></script>
 <script src="./senate/senate.js"></script>
 
+<script src="./gubernatorial/gubernatorialMargins.js"></script>
+<script src="./gubernatorial/gubernatorial.js"></script>
+
 <style>
     body {
         margin: 0;
@@ -190,6 +193,8 @@
             loadHouseData();
         } else if (mode == 'senate') {
             loadSenateData();
+        } else if (mode == 'gubernatorial') {
+            loadGubernatorialData();
         }
     });
 </script>
